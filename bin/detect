@@ -1,0 +1,4 @@
+#!/bin/bash
+# Always succeed for this buildpack, since we're assuming it's compatible with any app.
+echo "Upwind Buildpack"
+exit 0
