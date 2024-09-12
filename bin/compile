@@ -16,14 +16,19 @@ echo "Cloud Provider: byoc"
 echo "Cloud Account ID: byoc-BYOC"
 echo "Zone: byoc-us-west"
 
-# Log available system memory and OS information
-echo "Checking system memory and OS information..."
-if [[ -f /proc/meminfo ]]; then
-  cat /proc/meminfo | head -n 10
+# Log kernel version
+echo "Logging kernel version and OS information..."
+uname -r  # Kernel version
+uname -m  # Machine hardware name
+uname -a  # All system information
+
+# Log distribution details (if available)
+if [[ -f /etc/os-release ]]; then
+  echo "Distribution information:"
+  cat /etc/os-release
 else
-  echo "No /proc/meminfo available (expected in restricted environments like Heroku)"
+  echo "No OS distribution info available (expected in restricted environments like Heroku)"
 fi
-uname -a
 
 # Install the Upwind agent with additional environment variables and display all output/errors
 echo "Running Upwind agent installation script..."
