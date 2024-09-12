@@ -9,20 +9,57 @@ TMP_DIR=$(mktemp -d)
 client_id="$(cat $ENV_DIR/UPWIND_CLIENT_ID)"
 client_secret="$(cat $ENV_DIR/UPWIND_CLIENT_SECRET)"
 
-# Update and install necessary packages
-apt-get update
-apt-get install curl -y
+# Logging the start of the script
+echo "Starting Upwind agent installation process..."
+echo "Using Client ID: ${client_id}"
+echo "Cloud Provider: byoc"
+echo "Cloud Account ID: byoc-BYOC"
+echo "Zone: byoc-us-west"
 
-# Install the Upwind agent with additional environment variables
+# Update and install necessary packages
+echo "Updating apt-get..."
+apt-get update > /dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+  echo "ERROR: apt-get update failed"
+  exit 1
+fi
+
+echo "Installing curl..."
+apt-get install curl -y > /dev/null 2>&1
+if [[ $? -ne 0 ]]; then
+  echo "ERROR: curl installation failed"
+  exit 1
+fi
+
+# Log available system memory and OS information
+echo "Checking system memory and OS information..."
+if [[ -f /proc/meminfo ]]; then
+  cat /proc/meminfo | head -n 10
+else
+  echo "No /proc/meminfo available (expected in restricted environments like Heroku)"
+fi
+uname -a
+
+# Install the Upwind agent with additional environment variables and display all output/errors
+echo "Running Upwind agent installation script..."
 curl -s https://get.upwind.io/agent-bcc.sh | \
     UPWIND_CLIENT_ID="${client_id}" \
     UPWIND_CLIENT_SECRET="${client_secret}" \
     UPWIND_AGENT_CLOUD_PROVIDER="byoc" \
     UPWIND_AGENT_CLOUD_ACCOUNT_ID="byoc-BYOC" \
     UPWIND_AGENT_ZONE="byoc-us-west" \
-    bash -s
+    bash -s -x  # Add -x for debugging to show all commands and their output
+
+# Check if the agent installed successfully
+if [[ $? -eq 0 ]]; then
+  echo "Upwind agent installed successfully."
+else
+  echo "ERROR: Upwind agent installation failed."
+  exit 1
+fi
 
 # Cleanup temporary directory
+echo "Cleaning up temporary files..."
 rm -rf "$TMP_DIR"
 
-echo "Upwind agent installed successfully."
+echo "Upwind agent installation process completed."
