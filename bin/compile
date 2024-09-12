@@ -1,0 +1,22 @@
+#!/bin/bash
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+TMP_DIR=$(mktemp -d)
+
+# Variables
+client_id="$(cat $ENV_DIR/UPWIND_CLIENT_ID)"
+client_secret="$(cat $ENV_DIR/UPWIND_CLIENT_SECRET)"
+
+# Update and install necessary packages
+apt-get update
+apt-get install curl -y
+
+# Install the Upwind agent
+curl -s https://get.upwind.io/agent.sh | UPWIND_CLIENT_ID="$client_id" UPWIND_CLIENT_SECRET="$client_secret" bash -s
+
+# Cleanup temporary directory
+rm -rf "$TMP_DIR"
+
+echo "Upwind agent installed successfully."
