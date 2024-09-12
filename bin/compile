@@ -13,8 +13,14 @@ client_secret="$(cat $ENV_DIR/UPWIND_CLIENT_SECRET)"
 apt-get update
 apt-get install curl -y
 
-# Install the Upwind agent
-curl -s https://get.upwind.io/agent.sh | UPWIND_CLIENT_ID="$client_id" UPWIND_CLIENT_SECRET="$client_secret" bash -s
+# Install the Upwind agent with additional environment variables
+curl -s https://get.upwind.io/agent.sh | \
+    UPWIND_CLIENT_ID="${client_id}" \
+    UPWIND_CLIENT_SECRET="${client_secret}" \
+    UPWIND_AGENT_CLOUD_PROVIDER="byoc" \
+    UPWIND_AGENT_CLOUD_ACCOUNT_ID="byoc-BYOC" \
+    UPWIND_AGENT_ZONE="byoc-us-west" \
+    bash -s
 
 # Cleanup temporary directory
 rm -rf "$TMP_DIR"
