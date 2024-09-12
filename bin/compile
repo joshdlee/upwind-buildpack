@@ -16,21 +16,6 @@ echo "Cloud Provider: byoc"
 echo "Cloud Account ID: byoc-BYOC"
 echo "Zone: byoc-us-west"
 
-# Update and install necessary packages
-echo "Updating apt-get..."
-apt-get update > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
-  echo "ERROR: apt-get update failed"
-  exit 1
-fi
-
-echo "Installing curl..."
-apt-get install curl -y > /dev/null 2>&1
-if [[ $? -ne 0 ]]; then
-  echo "ERROR: curl installation failed"
-  exit 1
-fi
-
 # Log available system memory and OS information
 echo "Checking system memory and OS information..."
 if [[ -f /proc/meminfo ]]; then
