@@ -14,7 +14,7 @@ apt-get update
 apt-get install curl -y
 
 # Install the Upwind agent with additional environment variables
-curl -s https://get.upwind.io/agent.sh | \
+curl -s https://get.upwind.io/agent-bcc.sh | \
     UPWIND_CLIENT_ID="${client_id}" \
     UPWIND_CLIENT_SECRET="${client_secret}" \
     UPWIND_AGENT_CLOUD_PROVIDER="byoc" \
